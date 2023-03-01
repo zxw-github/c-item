@@ -24,7 +24,7 @@ void menu()
 }
 enum option
 {
-    exit,
+    EXIT,
     add,
     del,
     search,
@@ -69,7 +69,9 @@ int main(void)
             // 打印联系人
             PrintContact(&con);
             break;
-        case exit:
+        case EXIT:
+            // 销毁通讯录
+            DestoryContact(&con);
             printf("程序退出!\n");
             break;
         default:
