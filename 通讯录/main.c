@@ -11,6 +11,8 @@
 6，修改
 7，排序
 */
+// 退出时将通讯录的内容保存到文件中
+
 #include "contact.h"
 
 void menu()
@@ -70,6 +72,8 @@ int main(void)
             PrintContact(&con);
             break;
         case EXIT:
+            // 保存通讯录到文件
+            SaveContact(&con);
             // 销毁通讯录
             DestoryContact(&con);
             printf("程序退出!\n");

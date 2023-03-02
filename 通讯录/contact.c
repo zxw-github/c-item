@@ -7,6 +7,30 @@
 //     memset(pc->data, 0, sizeof(pc->data));
 // }
 // 初始化通讯录 -- 动态版本
+
+// 加载文件到通讯录
+void LoadContact(contact *pc)
+{
+    // 打开文件
+    FILE *pf = fopen("contact.md", "r");
+    if (pf == NULL)
+    {
+        perror("LoadContact");
+        return;
+    }
+    // 读取文件
+    perInfo temp = {0};
+    while (fread(&temp, sizeof(perInfo), 1, pf))
+    {
+        // 通讯录增容的问题
+        CheckContact(pc);
+        pc->data[pc->sz++] = temp;
+    }
+    // 关闭文件
+    fclose(pf);
+    pf = NULL;
+}
+
 void InitConst(contact *pc)
 {
     pc->data = (perInfo *)malloc(DEFAULT_SZ * sizeof(perInfo));
@@ -15,7 +39,9 @@ void InitConst(contact *pc)
         perror("InitConst");
     }
     pc->sz = 0;
-    pc->capacity = 0;
+    pc->capacity = DEFAULT_SZ;
+    // 加载文件
+    LoadContact(pc);
 }
 
 // 增加联系人 -- 静态
@@ -41,8 +67,8 @@ void InitConst(contact *pc)
 //     printf("添加成功!\n");
 // }
 
-// 增加联系人 -- 动态
-void AddContact(contact *pc)
+// 通讯录增容
+void CheckContact(contact *pc)
 {
     // 判断通讯录是否已满
     if (pc->sz == pc->capacity)
@@ -61,6 +87,12 @@ void AddContact(contact *pc)
             return;
         }
     }
+}
+
+// 增加联系人 -- 动态
+void AddContact(contact *pc)
+{
+    CheckContact(pc);
     printf("请输入名字:>");
     scanf("%s", pc->data[pc->sz].name);
     printf("请输入年龄:>");
@@ -218,4 +250,20 @@ void DestoryContact(contact *pc)
     pc->data = NULL;
     pc->sz = 0;
     pc->capacity = 0;
+}
+// 保存通讯录到文件
+void SaveContact(contact *pc)
+{
+    // 打开文件
+    // 退出时保存通讯录到文件contact.md
+    FILE *pf = fopen("contact.md", "w");
+    if (pf == NULL)
+    {
+        perror("SaveContact");
+        return;
+    }
+    for (int i = 0; i < pc->sz; i++)
+    {
+        fwrite(pc->data + i, sizeof(perInfo), 1, pf);
+    }
 }

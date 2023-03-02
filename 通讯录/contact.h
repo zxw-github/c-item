@@ -48,3 +48,9 @@ void SearchContact(const contact *pc);
 void ModifyContact(contact *pc);
 // 销毁通讯录
 void DestoryContact(contact *pc);
+// 保存通讯录到文件
+void SaveContact(contact *pc);
+// 加载文件
+void LoadContact(contact *pc);
+// 通讯录增容的问题
+void CheckContact(contact *pc);
